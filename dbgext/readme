@@ -1,0 +1,48 @@
+Debugger Extensions
+-------------------
+This package is a collection of useful
+IDC scripts for the Disassembler IDA PRO.
+They extend the functionality of the integrated debugger. Their primary
+usage is tracking user input, penetration testing and discovery of
+vulnerabilities by examining a binary's runtime behavior.
+Most of the scripts require IDA Pro 4.5
+or above, since version 4.5 introduced
+the integrated debugger.
+
+
+History:
+--------
+	13.04.2004 - initial release
+	16.04.2004 - dbgcmds.idc updated:
+				bugfixes, added dumpseg() and dumpsegs()
+ 	19.04.2004 - dbgcmds.idc updated:
+ 				saveregs(), loadregs(), fillmem() and help() added
+ 				
+
+Contents of this package:
+-------------------------
+
+filename:			description:
+
+readme.txt		This file
+
+dbgcmds.idc		User-driven commands
+				(memory dumper, -patcher)
+				
+callgraph.idc		Creates a callgraph of a
+				running process
+				
+lm.idc			Keeps track of user supplied
+				input
+
+notepad.exe.vcg	Sample callgraph
+
+For detailed usage information, see the comments
+in the header of each IDC script.
+
+
+
+---
+
+
+(c) Dennis Elser

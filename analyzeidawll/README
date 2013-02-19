@@ -1,0 +1,24 @@
+IDA Pro ida.wll analysis script
+tested on Windows build of IDA Pro 6.0 and 6.1
+
+usage:
+  load ida.wll into IDA, run this script
+
+history:
+
+  2011-04-13
+  ----------
+  script parses "Funcset" and "Extfun" tables,
+  renames and comments its elements for better
+  readability. This will reveal (most of the)
+  IDC functions that wrap SDK functions and
+  some undocumented ones like _peek(), _lpoke(),
+  _poke(), _time(), _call(), DecodeInstruction(),
+  ____(), and others.
+  If invoked at run-time (i.e. ida.wll during
+  a debugging session), the script will also
+  reveal IDC functions that have dynamically
+  been added using the SDK's set_idc_func()
+  functions.
+
+(c) Dennis Elser

@@ -1,0 +1,24 @@
+//////////////////////////////////////////////////
+//
+//  Snapshot! plugin for IDA PRO
+//  written by Dennis Elser.
+// 
+//  -------------------------------------------
+//
+//	This plugin creates a snapshot of a
+//	running process on your harddisk, which
+//	can later be restored again.
+//	You can also analyse and compare different
+//	dumps.
+//
+//	-------------------------------------------
+//
+//	history:
+//	--------
+//	-	10.10.2004:
+//		initial version
+//
+//
+//	(c) 2004, Dennis Elser
+//
+//////////////////////////////////////////////////

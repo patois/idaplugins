@@ -1,0 +1,29 @@
+//////////////////////////////////////////////////
+//
+//  Segdump plugin for IDA PRO
+//  written by Dennis Elser.
+// 
+//  -------------------------------------------
+//
+//	This plugin can create dumps of (memory)
+//	segments on your harddisk.
+//	This can be useful when unpacking packed
+//	executables.
+//
+//	-------------------------------------------
+//
+//	history:
+//	--------
+//	-	12.10.2004:
+//		* initial version
+//
+//	-	13.10.2004
+//		* fixed a bug in bool dump_seg_to_disk()
+//		  where the filehandle wasn't closed.
+//		* The dialog now shows start and
+//		  end addresses.
+//		* commented the code ;-)
+//
+//	(c) 2004, Dennis Elser
+//
+//////////////////////////////////////////////////

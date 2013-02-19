@@ -1,0 +1,58 @@
+//////////////////////////////////////////////////
+//
+//  EPF - Entry-Point-Finder plugin for IDA PRO
+//  written by Dennis Elser.
+// 
+//  -------------------------------------------
+//
+//	This plugin tries to find the
+//	Original Entrypoint of a packed/crypted
+//	Windows PE Executable.
+//	
+//
+//	N.B.: Since the plugin single-steps through
+//	the code, it can take a while to find the
+//	Entrypoint. It also strongly depends on the
+//	speed of your cpu and on the size of the code.
+//	Be also sure to use IDA 4.7 at least!
+//
+//	Anti-Debugging isn't taken care of, but you
+//	are "holding sourcecode in your hands" !
+//
+//	You might also have figured out that you
+//	can do other useful things (starting)
+//	with this release of the plugin.
+//	If - for example - an address of a string
+//	is known to you, but you have no idea
+//	where in the binary it is being processed,
+//	you can track it down using the option
+//	"Trace until any register holds a specific value".
+//	
+//	-------------------------------------------
+//
+//	(c) Dennis Elser 
+//
+//	-------------------------------------------
+//
+//	history:
+//	--------
+//	-	05.10.2004:
+//		initial version
+//
+//	-	10.10.2004
+//		added new detection method and
+//		combobox dialog
+//	-	30.10.2004
+//		minor speed improvements
+//		added progress status
+//	-	03.11.2004
+//		implemented some new options:
+//		- trace until specific mnemonic
+//		- trace until register holds value
+//		- trace until any register holds value
+//		- visually track eip
+//
+//
+//	(c) 2004, Dennis Elser
+//
+//////////////////////////////////////////////////

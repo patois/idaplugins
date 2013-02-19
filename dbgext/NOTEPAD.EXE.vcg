@@ -1,0 +1,288 @@
+graph:
+{
+title: "Flow graph of functions called during a debugging session (NOTEPAD.EXE)"
+manhattan_edges: yes
+layoutalgorithm: maxdepthslow
+finetuning: yes
+color: lightyellow
+xlspace: 30
+yspace: 100
+
+node: { title: "start" label: "start" color: lightblue}
+node: { title: "sub_1006CA8" label: "sub_1006CA8" color: lightblue}
+edge: { sourcename: "start" targetname: "sub_1006CA8" color: black}
+
+node: { title: "edi" label: "edi" color: lightblue}
+edge: { sourcename: "start" targetname: "edi" color: black}
+
+node: { title: "ds:__set_app_type" label: "ds:__set_app_type" color: lightblue}
+edge: { sourcename: "start" targetname: "ds:__set_app_type" color: black}
+
+node: { title: "ds:__p__fmode" label: "ds:__p__fmode" color: lightblue}
+edge: { sourcename: "start" targetname: "ds:__p__fmode" color: black}
+
+node: { title: "ds:__p__commode" label: "ds:__p__commode" color: lightblue}
+edge: { sourcename: "start" targetname: "ds:__p__commode" color: black}
+
+node: { title: "sub_1006D10" label: "sub_1006D10" color: lightblue}
+edge: { sourcename: "start" targetname: "sub_1006D10" color: black}
+
+node: { title: "sub_1006CFE" label: "sub_1006CFE" color: lightblue}
+edge: { sourcename: "start" targetname: "sub_1006CFE" color: black}
+
+node: { title: "_controlfp" label: "_controlfp" color: lightblue}
+edge: { sourcename: "sub_1006CFE" targetname: "_controlfp" color: black}
+
+node: { title: "_initterm" label: "_initterm" color: lightblue}
+edge: { sourcename: "start" targetname: "_initterm" color: black}
+
+node: { title: "ds:__getmainargs" label: "ds:__getmainargs" color: lightblue}
+edge: { sourcename: "start" targetname: "ds:__getmainargs" color: black}
+
+node: { title: "ds:GetStartupInfoA" label: "ds:GetStartupInfoA" color: lightblue}
+edge: { sourcename: "start" targetname: "ds:GetStartupInfoA" color: black}
+
+node: { title: "sub_1002801" label: "sub_1002801" color: lightblue}
+edge: { sourcename: "start" targetname: "sub_1002801" color: black}
+
+node: { title: "ds:GetCommandLineW" label: "ds:GetCommandLineW" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "ds:GetCommandLineW" color: black}
+
+node: { title: "ds:GetSystemMetrics" label: "ds:GetSystemMetrics" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "ds:GetSystemMetrics" color: black}
+
+node: { title: "ds:GetProcAddress" label: "ds:GetProcAddress" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "ds:GetProcAddress" color: black}
+
+node: { title: "sub_1001B4A" label: "sub_1001B4A" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "sub_1001B4A" color: black}
+
+node: { title: "ds:CharNextW" label: "ds:CharNextW" color: lightblue}
+edge: { sourcename: "sub_1001B4A" targetname: "ds:CharNextW" color: black}
+
+node: { title: "sub_10041CA" label: "sub_10041CA" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "sub_10041CA" color: black}
+
+node: { title: "esi" label: "esi" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "esi" color: black}
+
+node: { title: "ds:GetDC" label: "ds:GetDC" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:GetDC" color: black}
+
+node: { title: "sub_1003D57" label: "sub_1003D57" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_1003D57" color: black}
+
+node: { title: "sub_1003CF2" label: "sub_1003CF2" color: lightblue}
+edge: { sourcename: "sub_1003D57" targetname: "sub_1003CF2" color: black}
+
+node: { title: "ds:LocalAlloc" label: "ds:LocalAlloc" color: lightblue}
+edge: { sourcename: "sub_1003CF2" targetname: "ds:LocalAlloc" color: black}
+
+node: { title: "ds:LoadStringW" label: "ds:LoadStringW" color: lightblue}
+edge: { sourcename: "sub_1003CF2" targetname: "ds:LoadStringW" color: black}
+
+node: { title: "ds:LocalFree" label: "ds:LocalFree" color: lightblue}
+edge: { sourcename: "sub_1003CF2" targetname: "ds:LocalFree" color: black}
+
+edge: { sourcename: "sub_1003D57" targetname: "ds:LocalAlloc" color: black}
+
+node: { title: "ds:LocalSize" label: "ds:LocalSize" color: lightblue}
+edge: { sourcename: "sub_1003D57" targetname: "ds:LocalSize" color: black}
+
+edge: { sourcename: "sub_1003D57" targetname: "ds:LoadStringW" color: black}
+
+edge: { sourcename: "sub_1003D57" targetname: "esi" color: black}
+
+edge: { sourcename: "sub_10041CA" targetname: "ds:GetSystemMetrics" color: black}
+
+edge: { sourcename: "sub_10041CA" targetname: "edi" color: black}
+
+node: { title: "ds:LoadAcceleratorsW" label: "ds:LoadAcceleratorsW" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:LoadAcceleratorsW" color: black}
+
+node: { title: "sub_1004143" label: "sub_1004143" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_1004143" color: black}
+
+edge: { sourcename: "sub_1004143" targetname: "ds:GetSystemMetrics" color: black}
+
+node: { title: "ds:LoadCursorW" label: "ds:LoadCursorW" color: lightblue}
+edge: { sourcename: "sub_1004143" targetname: "ds:LoadCursorW" color: black}
+
+node: { title: "ds:LoadIconW" label: "ds:LoadIconW" color: lightblue}
+edge: { sourcename: "sub_1004143" targetname: "ds:LoadIconW" color: black}
+
+node: { title: "ds:LoadImageW" label: "ds:LoadImageW" color: lightblue}
+edge: { sourcename: "sub_1004143" targetname: "ds:LoadImageW" color: black}
+
+node: { title: "ds:RegisterClassExW" label: "ds:RegisterClassExW" color: lightblue}
+edge: { sourcename: "sub_1004143" targetname: "ds:RegisterClassExW" color: black}
+
+node: { title: "sub_10018DF" label: "sub_10018DF" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_10018DF" color: black}
+
+node: { title: "ds:GetLocaleInfoW" label: "ds:GetLocaleInfoW" color: lightblue}
+edge: { sourcename: "sub_10018DF" targetname: "ds:GetLocaleInfoW" color: black}
+
+node: { title: "sub_1003972" label: "sub_1003972" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_1003972" color: black}
+
+node: { title: "ds:GetStockObject" label: "ds:GetStockObject" color: lightblue}
+edge: { sourcename: "sub_1003972" targetname: "ds:GetStockObject" color: black}
+
+node: { title: "ds:GetObjectW" label: "ds:GetObjectW" color: lightblue}
+edge: { sourcename: "sub_1003972" targetname: "ds:GetObjectW" color: black}
+
+node: { title: "ds:RegCreateKeyW" label: "ds:RegCreateKeyW" color: lightblue}
+edge: { sourcename: "sub_1003972" targetname: "ds:RegCreateKeyW" color: black}
+
+node: { title: "sub_1003682" label: "sub_1003682" color: lightblue}
+edge: { sourcename: "sub_1003972" targetname: "sub_1003682" color: black}
+
+node: { title: "ds:RegQueryValueExW" label: "ds:RegQueryValueExW" color: lightblue}
+edge: { sourcename: "sub_1003682" targetname: "ds:RegQueryValueExW" color: black}
+
+node: { title: "sub_10036D0" label: "sub_10036D0" color: lightblue}
+edge: { sourcename: "sub_1003972" targetname: "sub_10036D0" color: black}
+
+edge: { sourcename: "sub_10036D0" targetname: "ds:RegQueryValueExW" color: black}
+
+node: { title: "ds:RegCloseKey" label: "ds:RegCloseKey" color: lightblue}
+edge: { sourcename: "sub_1003972" targetname: "ds:RegCloseKey" color: black}
+
+node: { title: "ds:CreateWindowExW" label: "ds:CreateWindowExW" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:CreateWindowExW" color: black}
+
+node: { title: "ds:SetWindowPlacement" label: "ds:SetWindowPlacement" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:SetWindowPlacement" color: black}
+
+node: { title: "ds:DragAcceptFiles" label: "ds:DragAcceptFiles" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:DragAcceptFiles" color: black}
+
+node: { title: "ds:CreateStatusWindowW" label: "ds:CreateStatusWindowW" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:CreateStatusWindowW" color: black}
+
+node: { title: "sub_1001B9A" label: "sub_1001B9A" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_1001B9A" color: black}
+
+edge: { sourcename: "sub_1001B9A" targetname: "esi" color: black}
+
+node: { title: "ds:_snwprintf" label: "ds:_snwprintf" color: lightblue}
+edge: { sourcename: "sub_1001B9A" targetname: "ds:_snwprintf" color: black}
+
+node: { title: "ds:GetMenu" label: "ds:GetMenu" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:GetMenu" color: black}
+
+node: { title: "ds:GetSubMenu" label: "ds:GetSubMenu" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:GetSubMenu" color: black}
+
+node: { title: "ds:EnableMenuItem" label: "ds:EnableMenuItem" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:EnableMenuItem" color: black}
+
+node: { title: "ds:GetDeviceCaps" label: "ds:GetDeviceCaps" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:GetDeviceCaps" color: black}
+
+node: { title: "ds:MulDiv" label: "ds:MulDiv" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:MulDiv" color: black}
+
+node: { title: "ds:CreateFontIndirectW" label: "ds:CreateFontIndirectW" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:CreateFontIndirectW" color: black}
+
+node: { title: "ds:SelectObject" label: "ds:SelectObject" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:SelectObject" color: black}
+
+node: { title: "ds:GetTextFaceW" label: "ds:GetTextFaceW" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:GetTextFaceW" color: black}
+
+node: { title: "ds:lstrcmpiW" label: "ds:lstrcmpiW" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:lstrcmpiW" color: black}
+
+node: { title: "ds:ReleaseDC" label: "ds:ReleaseDC" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:ReleaseDC" color: black}
+
+edge: { sourcename: "sub_10041CA" targetname: "ds:LocalAlloc" color: black}
+
+node: { title: "ds:PostMessageW" label: "ds:PostMessageW" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:PostMessageW" color: black}
+
+node: { title: "sub_1001C5B" label: "sub_1001C5B" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_1001C5B" color: black}
+
+node: { title: "ds:lstrcmpW" label: "ds:lstrcmpW" color: lightblue}
+edge: { sourcename: "sub_1001C5B" targetname: "ds:lstrcmpW" color: black}
+
+node: { title: "ds:lstrcpyW" label: "ds:lstrcpyW" color: lightblue}
+edge: { sourcename: "sub_1001C5B" targetname: "ds:lstrcpyW" color: black}
+
+edge: { sourcename: "sub_1001C5B" targetname: "ds:_snwprintf" color: black}
+
+node: { title: "ds:SendMessageW" label: "ds:SendMessageW" color: lightblue}
+edge: { sourcename: "sub_1001C5B" targetname: "ds:SendMessageW" color: black}
+
+node: { title: "ds:lstrcatW" label: "ds:lstrcatW" color: lightblue}
+edge: { sourcename: "sub_1001C5B" targetname: "ds:lstrcatW" color: black}
+
+node: { title: "ds:SetWindowTextW" label: "ds:SetWindowTextW" color: lightblue}
+edge: { sourcename: "sub_1001C5B" targetname: "ds:SetWindowTextW" color: black}
+
+node: { title: "ds:ShowWindow" label: "ds:ShowWindow" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:ShowWindow" color: black}
+
+node: { title: "ds:SetCursor" label: "ds:SetCursor" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:SetCursor" color: black}
+
+node: { title: "sub_1003E0F" label: "sub_1003E0F" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_1003E0F" color: black}
+
+node: { title: "sub_1003C15" label: "sub_1003C15" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_1003C15" color: black}
+
+edge: { sourcename: "sub_1003C15" targetname: "esi" color: black}
+
+node: { title: "sub_1003E29" label: "sub_1003E29" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_1003E29" color: black}
+
+edge: { sourcename: "sub_1003E29" targetname: "sub_1003C15" color: black}
+
+node: { title: "sub_1003F7F" label: "sub_1003F7F" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_1003F7F" color: black}
+
+edge: { sourcename: "sub_1003F7F" targetname: "sub_1003C15" color: black}
+
+node: { title: "sub_10040D7" label: "sub_10040D7" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "sub_10040D7" color: black}
+
+edge: { sourcename: "sub_10040D7" targetname: "esi" color: black}
+
+edge: { sourcename: "sub_10040D7" targetname: "edi" color: black}
+
+node: { title: "ds:GetKeyboardLayout" label: "ds:GetKeyboardLayout" color: lightblue}
+edge: { sourcename: "sub_10041CA" targetname: "ds:GetKeyboardLayout" color: black}
+
+node: { title: "ds:GetCurrentProcessId" label: "ds:GetCurrentProcessId" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "ds:GetCurrentProcessId" color: black}
+
+node: { title: "ds:SetWinEventHook" label: "ds:SetWinEventHook" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "ds:SetWinEventHook" color: black}
+
+edge: { sourcename: "sub_1002801" targetname: "edi" color: black}
+
+node: { title: "ds:TranslateAcceleratorW" label: "ds:TranslateAcceleratorW" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "ds:TranslateAcceleratorW" color: black}
+
+node: { title: "ds:TranslateMessage" label: "ds:TranslateMessage" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "ds:TranslateMessage" color: black}
+
+node: { title: "ds:DispatchMessageW" label: "ds:DispatchMessageW" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "ds:DispatchMessageW" color: black}
+
+node: { title: "sub_10018B0" label: "sub_10018B0" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "sub_10018B0" color: black}
+
+edge: { sourcename: "sub_1002801" targetname: "ds:LocalFree" color: black}
+
+node: { title: "ds:UnhookWinEvent" label: "ds:UnhookWinEvent" color: lightblue}
+edge: { sourcename: "sub_1002801" targetname: "ds:UnhookWinEvent" color: black}
+
+node: { title: "ds:exit" label: "ds:exit" color: lightblue}
+edge: { sourcename: "start" targetname: "ds:exit" color: black}
+}
