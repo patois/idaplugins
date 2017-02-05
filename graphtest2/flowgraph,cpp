@@ -1,0 +1,418 @@
+/*
+ *	Graphtest 2 - flowgraph
+ *  
+ *  Author: Dennis Elser, 06/2006
+ *
+ *  This example displays a custom flowgraph of the
+ *  currently "active" function. Each basic block contains
+ *	the following information (instead of disassembly):
+ *
+ *	1.) Node number
+ *  2.) Start Address
+ *  3.) End Address
+ *  4.) Number of instructions
+ *  5.) Indegree (incoming edges)
+ *  6.) Outdegree (outgoing edges)
+ *
+ *  The color of a basic block / node indicates the number
+ *	of edges:
+ *
+ *	blue   = node has either incoming or outgoing edges only (single direction)
+ *	white  = node has incoming and outgoing edges, but less than five
+ *	yellow = node has incoming and outgoing edges, but more than four
+ *	grey   = indegree of node matches outdegree
+ *
+ *	Feel free to modify!
+ *
+ *  Released on The IDA Palace (www.backtrace.de).
+ *
+ *	nb: parts of the code have been taken from Ilfak Guilvanov's Coverage Analyzer "Coverit".
+ *	You can get Coverit at www.hexblog.com
+ *
+ */
+
+#include <windows.h>
+
+#include <ida.hpp>
+#include <idp.hpp>
+#include <graph.hpp>
+#include <loader.hpp>
+#include <kernwin.hpp>
+
+
+typedef std::map<ea_t, asize_t> basic_blocks_t;
+
+//--------------------------------------------------------------------------
+static bool hooked = false;
+static std::vector<string> graph_text;
+static basic_blocks_t bbs;
+static netnode id;
+
+//--------------------------------------------------------------------------
+static bool gather_basic_blocks(ea_t ea1, ea_t ea2)
+{
+  show_wait_box("Finding basic blocks");
+  ea_t start = BADADDR;
+  bool ok = true;
+  int cnt = 0;
+  while ( ea1 != ea2 )
+  {
+    if ( wasBreak() )
+    {
+      ok = false;
+      break;
+    }
+    //if ( ++cnt == 1000 )
+    {
+      showAddr(ea1);
+      cnt = 0;
+    }
+    if ( start == BADADDR )
+    {
+	  start = ea1;
+      ea1 = nextthat(ea1, ea2, f_isCode, NULL);
+      if ( ea1 >= ea2 )
+        break;
+      //start = ea1;
+    }
+    while ( ea1 < ea2 )
+    {
+      if ( !ua_ana0(ea1) )
+        break;
+      ea1 = get_item_end(ea1);
+      if ( is_basic_block_end(false) )
+        break;
+    }
+    if ( ea1 != start )
+      bbs[start] = ea1 - start; // remember the bb start and size
+    if ( !isCode(get_flags_novalue(ea1)) )
+      start = BADADDR;
+    else
+      start = ea1;
+  }
+  hide_wait_box();
+  return ok;
+}
+
+
+//--------------------------------------------------------------------------
+// wrapper for gather_basic_blocks()
+static void update_basic_blocks(void)
+{
+	bbs.clear();
+	func_t *f = NULL;
+
+	f = get_func(get_screen_ea());
+	if( f != NULL )
+	{
+		if( gather_basic_blocks( f->startEA, f->endEA ) )
+		{	
+			//msg("List of basic blocks:\n");
+			for ( basic_blocks_t::iterator p=bbs.begin(); p != bbs.end(); ++p )
+			{
+				size_t i = p->first;// - base;
+				//msg("%08X: (end: %08X)\n",i,i+p->second);
+			}
+		}
+			
+	}
+
+}
+
+
+//--------------------------------------------------------------------------
+// return number of instructions within two addresses
+static size_t get_num_insns(ea_t start, ea_t end)
+{
+	ea_t cur = start;
+	size_t insns = 0;
+
+	while( cur != BADADDR )
+	{
+		if(isCode(getFlags(cur)))
+			insns++;
+		start = cur;
+		cur=next_head( start, end );
+	}
+
+	return insns; 
+}
+
+
+
+//--------------------------------------------------------------------------
+static int idaapi callback(void *, int code, va_list va)
+{
+  int result = 0;
+  switch ( code )
+  {
+
+ 	case grcode_user_refresh: // refresh user-defined graph nodes and edges
+		// in:  mutable_graph_t *g
+		// out: success
+		{
+			mutable_graph_t *g = va_arg(va, mutable_graph_t *);
+			msg("%x: refresh\n", g);
+			
+			if ( g->empty() )
+				g->resize( (int)(bbs.size())  );
+			
+			int j=0;
+			for ( basic_blocks_t::iterator p=bbs.begin(); p != bbs.end(); ++p )
+			{
+				//size_t i = p->first;// - base;
+				//msg("%08X: (end: %08X)\n",i,i+p->second);
+				xrefblk_t xb;
+				for ( bool ok=xb.first_from(prevthat(p->first+p->second, 0, f_isCode, NULL), XREF_ALL); ok; ok=xb.next_from() )
+				{
+					//xb.to - contains the referenced address
+					int k=0;
+					for ( basic_blocks_t::iterator p2=bbs.begin(); p2 != bbs.end(); ++p2 )
+					{
+						if( xb.to == p2->first )
+						{
+							g->add_edge(j, k, NULL);
+							msg("%08x: -> %08X\n", prevthat(p->first+p->second, 0, f_isCode, NULL), xb.to);
+						}
+						k++;
+					}
+				}
+				j++;
+			}
+			result = true;
+		}
+		break;
+
+    case grcode_user_gentext: // generate text for user-defined graph nodes
+		// in:  mutable_graph_t *g
+		// out: must return 0
+		{
+			mutable_graph_t *g = va_arg(va, mutable_graph_t *);
+			msg("%x: generate text for graph nodes\n", g);
+			graph_text.resize(g->size());
+			
+			for ( node_iterator p=g->begin(); p != g->end(); ++p )
+			{
+				int n = *p;
+				char buf[MAXSTR];
+
+				qsnprintf(buf,sizeof(buf),"Node    %8d\n",n);
+				graph_text[n] = buf;
+
+				int j=0;
+				for ( basic_blocks_t::iterator bbi=bbs.begin(); bbi != bbs.end(); ++bbi )
+				{
+					if(n==j)
+					{
+						qsnprintf(buf, sizeof(buf), "StartEA %08X\n"
+													"EndEA   %08X\n",
+													bbi->first,
+													bbi->first+bbi->second);
+						graph_text[n] += buf;
+						qsnprintf(buf,sizeof(buf),"Instr   %8d\n",get_num_insns(bbi->first,bbi->first+bbi->second));
+						graph_text[n] += buf;
+						break;
+					}
+					j++;
+				}
+				
+				qsnprintf(buf, sizeof(buf),"Indeg   %8d\n"
+										   "Outdeg  %8d\n",
+										   g->npred(n),
+										   g->nsucc(n)
+										   );
+
+				
+				graph_text[n] += buf;
+				
+			}
+			result = true;
+		}
+		break;
+		
+    case grcode_user_text:    // retrieve text for user-defined graph node
+		// in:  mutable_graph_t *g
+		//      int node
+		//      const char **result
+		//      bgcolor_t *bg_color (maybe NULL)
+		// out: must return 0, result must be filled
+		// NB: do not use anything calling GDI!
+		{
+			mutable_graph_t *g = va_arg(va, mutable_graph_t *);
+			int node           = va_argi(va, int);
+			const char **text  = va_arg(va, const char **);
+			bgcolor_t *bgcolor = va_arg(va, bgcolor_t *);
+
+			int succ = g->nsucc(node);
+			int	pred = g->npred(node);
+
+			*text = graph_text[node].c_str();
+	
+			if ( bgcolor != NULL )
+			{
+				// same indegree as outdegree and != 0 ?
+				if(pred == succ && pred != 0)
+					*bgcolor = RGB(220, 220, 220);
+
+				// a few edges only
+				else if(  succ <= 2 && pred <= 2 )
+				{
+					if( succ == 0 || pred == 0 )
+					{
+						// nodes with no edges at all
+						if(pred == succ)
+							*bgcolor = RGB(255, 50, 50);
+						// nodes with either in- or outdegree edges only
+						else
+							*bgcolor = RGB(0, 130, 255);
+					}
+					// "normal" node, default color
+					else
+						*bgcolor = DEFCOLOR;
+				}
+				// in- or outdegree > 2
+				else
+					*bgcolor = RGB( 255, 255, 0 );
+			}
+
+			result = true;
+			qnotused(g);
+		}
+		break;
+
+
+    case grcode_dblclicked:   // a graph node has been double clicked
+                              // in:  graph_viewer_t *gv
+                              //      selection_item_t *current_item
+                              // out: 0-ok, 1-ignore click
+     {
+       graph_viewer_t *v   = va_arg(va, graph_viewer_t *);
+       selection_item_t *s = va_arg(va, selection_item_t *);
+
+       if ( s->is_node )
+	   {
+				int j=0;
+
+				for ( basic_blocks_t::iterator bbi=bbs.begin(); bbi != bbs.end(); ++bbi )
+				{
+					if(s->node==j)
+					{
+						//jump to dblclicked node in disassembly/IDA graph view
+						jumpto(bbi->first,-1);
+						break;
+					}
+					j++;
+				}
+	   }
+
+     }
+     break;
+ 
+	}
+  return result;
+}
+
+
+//--------------------------------------------------------------------------
+int idaapi init(void)
+{
+  // stay in the memory since we have hooks
+  return PLUGIN_KEEP;
+}
+
+//--------------------------------------------------------------------------
+void idaapi term(void)
+{
+  if ( hooked )
+    unhook_from_notification_point(HT_GRAPH, callback);
+}
+
+
+//--------------------------------------------------------------------------
+void idaapi run(int /*arg*/)
+{
+	
+	HWND hwnd = NULL;
+	graph_viewer_t *gv = NULL;
+	TForm *form = NULL;
+
+	update_basic_blocks();
+	
+	form = create_tform("Graphtest 2", &hwnd);
+	if ( hwnd != NULL )
+	{
+		if ( !hooked )
+		{
+			hooked = true;
+			hook_to_notification_point(HT_GRAPH, callback, NULL);
+		}
+		// get a unique graph id
+		id.create();
+		gv = create_graph_viewer( form,  id );
+		open_tform( form, FORM_MDI|FORM_TAB|FORM_MENU );
+		if ( gv != NULL )
+		{
+			viewer_fit_window( gv );
+		}
+	}
+	else
+	{
+		if( int x = askyn_cv(0,"Close the current graph? Select 'No' to refresh the graph.",0) == 1 )
+			close_tform(form, 0);
+		else if(x == 0)
+		{
+			gv = create_graph_viewer( form,  id );
+			refresh_viewer( gv );
+		}
+	}
+}
+
+//--------------------------------------------------------------------------
+char comment[] = "custom flowgrapher";
+
+char help[] =
+        "Graphtest 2\n"
+        "\n"
+        "Shows you how to create custom graphs\n"
+		"See sourcecode for details ;)";
+
+
+//--------------------------------------------------------------------------
+// This is the preferred name of the plugin module in the menu system
+// The preferred name may be overriden in plugins.cfg file
+
+char wanted_name[] = "Custom graph";
+
+
+// This is the preferred hotkey for the plugin module
+// The preferred hotkey may be overriden in plugins.cfg file
+// Note: IDA won't tell you if the hotkey is not correct
+//       It will just disable the hotkey.
+
+char wanted_hotkey[] = "6";
+
+
+//--------------------------------------------------------------------------
+//
+//      PLUGIN DESCRIPTION BLOCK
+//
+//--------------------------------------------------------------------------
+plugin_t PLUGIN =
+{
+  IDP_INTERFACE_VERSION,
+  0,                    // plugin flags
+  init,                 // initialize
+
+  term,                 // terminate. this pointer may be NULL.
+
+  run,                  // invoke plugin
+
+  comment,              // long comment about the plugin
+                        // it could appear in the status line
+                        // or as a hint
+
+  help,                 // multiline help about the plugin
+
+  wanted_name,          // the preferred short name of the plugin
+  wanted_hotkey         // the preferred hotkey to run the plugin
+};
